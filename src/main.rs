@@ -1,23 +1,22 @@
 fn main() {
-    let mut input = vec![1,1,2];
+    let mut input = vec![3,2,2,3];
     println!(
         "{}",
-        Solution::remove_duplicates(&mut input),
+        Solution::remove_element(&mut input, 3),
     );
 }
 
 struct Solution {}
 impl Solution {
-    pub fn remove_duplicates(nums: &mut Vec<i32>) -> i32 {
+    pub fn remove_element(nums: &mut Vec<i32>, val: i32) -> i32 {
         let mut slow = 0;
         for fast in 0..nums.len() {
-            let item_fast = nums[fast];
-            let item_slow = nums[slow];
-            if item_fast != item_slow {
+            let curr = nums[fast];
+            if curr != val {
+                nums[slow] = curr;
                 slow += 1;
-                nums[slow] = item_fast;
             }
         }
-        (slow + 1) as i32
+        slow as i32
     }
 }
