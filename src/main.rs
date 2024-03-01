@@ -1,24 +1,17 @@
 fn main() {
-    let mut input = vec![3,2,2,3];
-    println!(
-        "{}",
-        Solution::remove_element(&mut input, 3),
-    );
+    assert_eq!(Solution::search_insert(vec![1,3,5,6], 5), 2);
+    assert_eq!(Solution::search_insert(vec![1,3,5,6], 2), 1);
 }
 
 struct Solution {}
 impl Solution {
-    pub fn remove_element(nums: &mut Vec<i32>, val: i32) -> i32 {
-        let mut left = 0;
-        let mut right = nums.len();
-        while left < right {
-            if nums[left] == val {
-                nums[left] = nums[right - 1];
-                right -= 1;
-            } else {
-                left += 1;
+    pub fn search_insert(nums: Vec<i32>, target: i32) -> i32 {
+        for index in 0..nums.len() {
+            let item = nums[index];
+            if item >= target {
+                return index as i32;
             }
         }
-        left as i32
+        nums.len() as i32
     }
 }
