@@ -1,33 +1,31 @@
 fn main() {
-    assert_eq!(Solution::search_insert(vec![1,3,5,6], 0), 0);
-    assert_eq!(Solution::search_insert(vec![1,3,5,6], 4), 2);
-    assert_eq!(Solution::search_insert(vec![1,3,5,6], 5), 2);
-    assert_eq!(Solution::search_insert(vec![1,3,5,6], 6), 3);
-    assert_eq!(Solution::search_insert(vec![1,3,5,6], 7), 4);
-    assert_eq!(Solution::search_insert(vec![1,3,5,6], 2), 1);
-    assert_eq!(Solution::search_insert(vec![], 2), 0);
+    assert_eq!(Solution::plus_one(vec![1,2,3]), vec![1,2,4]);
+    assert_eq!(Solution::plus_one(vec![4,3,2,1]), vec![4,3,2,2]);
+    assert_eq!(Solution::plus_one(vec![0]), vec![1]);
+    assert_eq!(Solution::plus_one(vec![9]), vec![1,0]);
 }
 
 struct Solution {}
 impl Solution {
-    pub fn search_insert(nums: Vec<i32>, target: i32) -> i32 {
-        let n = nums.len() as i32;
-        let mut left= 0;
-        let mut right = n - 1;
+    pub fn plus_one(digits: Vec<i32>) -> Vec<i32> {
+        let mut output = vec![];
+        let mut index = (digits.len() - 1) as i32;
+        let mut add_num = 1;
 
-        while left <= right {
-            let mid = left + ((right - left) >> 1);
-            let mid_num = nums[mid as usize];
-
-            if target == mid_num {
-                return mid;
-            } else if target < mid_num {
-                right = mid - 1;
+        while index >= 0 {
+            let result = digits[index as usize] + add_num;
+            if result < 10 {
+                output.insert(0, result);
+                add_num = 0;
             } else {
-                left = mid + 1;
+                output.insert(0, result - 10);
+                add_num = 1;
             }
+            index -= 1;
         }
-
-        right + 1
+        if add_num > 0 {
+            output.insert(0, add_num);
+        }
+        output
     }
 }
