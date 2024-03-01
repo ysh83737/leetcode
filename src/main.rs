@@ -16,7 +16,7 @@ impl Solution {
             let result = digits[index as usize] + add_num;
             if result < 10 {
                 output.insert(0, result);
-                add_num = 0;
+                return [&digits[0..index as usize], &output].concat();
             } else {
                 output.insert(0, result - 10);
                 add_num = 1;
