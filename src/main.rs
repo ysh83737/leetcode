@@ -1,31 +1,57 @@
 fn main() {
-    assert_eq!(Solution::plus_one(vec![1,2,3]), vec![1,2,4]);
-    assert_eq!(Solution::plus_one(vec![4,3,2,1]), vec![4,3,2,2]);
-    assert_eq!(Solution::plus_one(vec![0]), vec![1]);
-    assert_eq!(Solution::plus_one(vec![9]), vec![1,0]);
+    let mut nums1 = vec![1,2,3,0,0,0];
+    let mut nums2 = vec![2,5,6];
+    Solution::merge(
+        &mut nums1,
+        3,
+        &mut nums2,
+        3,
+    );
+    println!("done");
+    println!("nums1={:?}", nums1);
+    let mut nums1 = vec![0];
+    let mut nums2 = vec![1];
+    Solution::merge(
+        &mut nums1,
+        0,
+        &mut nums2,
+        1,
+    );
+    println!("done");
+    println!("nums1={:?}", nums1);
 }
 
 struct Solution {}
 impl Solution {
-    pub fn plus_one(digits: Vec<i32>) -> Vec<i32> {
-        let mut output = vec![];
-        let mut index = (digits.len() - 1) as i32;
-        let mut add_num = 1;
-
-        while index >= 0 {
-            let result = digits[index as usize] + add_num;
-            if result < 10 {
-                output.insert(0, result);
-                return [&digits[0..index as usize], &output].concat();
+    pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
+        let mut index = m + n - 1;
+        let mut i = m - 1;
+        let mut j = n - 1;
+        while index >= 0 && i >=0 && j >= 0 {
+            let num1 = nums1[i as usize];
+            let num2 = nums2[j as usize];
+            if num1 > num2 {
+                nums1[index as usize] = num1;
+                index -= 1;
+                i -= 1;
+            } else if num1 < num2 {
+                nums1[index as usize] = num2;
+                index -= 1;
+                j -= 1;
             } else {
-                output.insert(0, result - 10);
-                add_num = 1;
+                nums1[index as usize] = num1;
+                index -= 1;
+                i -= 1;
+                nums1[index as usize] = num2;
+                index -= 1;
+                j -= 1;
             }
+        }
+        while j >= 0 {
+            let num2 = nums2[j as usize];
+            nums1[index as usize] = num2;
             index -= 1;
+            j -= 1;
         }
-        if add_num > 0 {
-            output.insert(0, add_num);
-        }
-        output
     }
 }
