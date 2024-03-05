@@ -27,31 +27,26 @@ impl Solution {
         let mut index = m + n - 1;
         let mut i = m - 1;
         let mut j = n - 1;
-        while index >= 0 && i >=0 && j >= 0 {
-            let num1 = nums1[i as usize];
-            let num2 = nums2[j as usize];
-            if num1 > num2 {
-                nums1[index as usize] = num1;
-                index -= 1;
-                i -= 1;
-            } else if num1 < num2 {
-                nums1[index as usize] = num2;
-                index -= 1;
+        let mut cur: i32;
+        while i >=0 || j >= 0 {
+            if j == -1 {
+                break;
+            } else if i == -1 {
+                cur = nums2[j as usize];
                 j -= 1;
             } else {
-                nums1[index as usize] = num1;
-                index -= 1;
-                i -= 1;
-                nums1[index as usize] = num2;
-                index -= 1;
-                j -= 1;
+                let num1 = nums1[i as usize];
+                let num2 = nums2[j as usize];
+                if num1 > num2 {
+                    cur = num1;
+                    i -= 1;
+                } else {
+                    cur = num2;
+                    j -= 1;
+                }
             }
-        }
-        while j >= 0 {
-            let num2 = nums2[j as usize];
-            nums1[index as usize] = num2;
+            nums1[index as usize] = cur;
             index -= 1;
-            j -= 1;
         }
     }
 }
