@@ -1,52 +1,41 @@
 fn main() {
-    let mut nums1 = vec![1,2,3,0,0,0];
-    let mut nums2 = vec![2,5,6];
-    Solution::merge(
-        &mut nums1,
-        3,
-        &mut nums2,
-        3,
-    );
-    println!("done");
-    println!("nums1={:?}", nums1);
-    let mut nums1 = vec![0];
-    let mut nums2 = vec![1];
-    Solution::merge(
-        &mut nums1,
-        0,
-        &mut nums2,
-        1,
-    );
-    println!("done");
-    println!("nums1={:?}", nums1);
+    let mut nums = vec![-10,-3,0,5,9];
+    let result = Solution::sorted_array_to_bst(nums);
+    println!("{:?}", result);
 }
 
 struct Solution {}
+
+// Definition for a binary tree node.
+#[derive(Debug, PartialEq, Eq)]
+pub struct TreeNode {
+  pub val: i32,
+  pub left: Option<Rc<RefCell<TreeNode>>>,
+  pub right: Option<Rc<RefCell<TreeNode>>>,
+}
+
+impl TreeNode {
+  #[inline]
+  pub fn new(val: i32) -> Self {
+    TreeNode {
+      val,
+      left: None,
+      right: None
+    }
+  }
+}
+use std::rc::Rc;
+use std::cell::RefCell;
 impl Solution {
-    pub fn merge(nums1: &mut Vec<i32>, m: i32, nums2: &mut Vec<i32>, n: i32) {
-        let mut index = m + n - 1;
-        let mut i = m - 1;
-        let mut j = n - 1;
-        let mut cur: i32;
-        while i >=0 || j >= 0 {
-            if j == -1 {
-                break;
-            } else if i == -1 {
-                cur = nums2[j as usize];
-                j -= 1;
-            } else {
-                let num1 = nums1[i as usize];
-                let num2 = nums2[j as usize];
-                if num1 > num2 {
-                    cur = num1;
-                    i -= 1;
-                } else {
-                    cur = num2;
-                    j -= 1;
-                }
-            }
-            nums1[index as usize] = cur;
-            index -= 1;
+    pub fn sorted_array_to_bst(nums: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
+        if nums.len() == 0 {
+            return None;
         }
+        let mid_idx = nums.len() >> 1;
+        let mid_num = nums[mid_idx];
+        let mut node = TreeNode::new(mid_num);
+        node.left = Solution::sorted_array_to_bst(nums[0..mid_idx].to_vec());
+        node.right = Solution::sorted_array_to_bst(nums[(mid_idx + 1)..].to_vec());
+        Some(Rc::new(RefCell::new(node)))
     }
 }
