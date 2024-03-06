@@ -28,14 +28,17 @@ use std::rc::Rc;
 use std::cell::RefCell;
 impl Solution {
     pub fn sorted_array_to_bst(nums: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
-        if nums.len() == 0 {
+        Solution::helper(&nums, 0, nums.len())
+    }
+    fn helper(nums: &Vec<i32>, start_idx: usize, end_idx: usize) -> Option<Rc<RefCell<TreeNode>>> {
+        if start_idx == end_idx {
             return None;
         }
-        let mid_idx = nums.len() >> 1;
+        let mid_idx = start_idx + ((end_idx - start_idx) >> 1);
         let mid_num = nums[mid_idx];
         let mut node = TreeNode::new(mid_num);
-        node.left = Solution::sorted_array_to_bst(nums[0..mid_idx].to_vec());
-        node.right = Solution::sorted_array_to_bst(nums[(mid_idx + 1)..].to_vec());
+        node.left = Solution::helper(nums, start_idx, mid_idx);
+        node.right = Solution::helper(nums, mid_idx + 1, end_idx);
         Some(Rc::new(RefCell::new(node)))
     }
 }
