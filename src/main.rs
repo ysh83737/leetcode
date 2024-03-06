@@ -1,44 +1,23 @@
 fn main() {
-    let mut nums = vec![-10,-3,0,5,9];
-    let result = Solution::sorted_array_to_bst(nums);
+    let result = Solution::generate(5);
     println!("{:?}", result);
 }
 
 struct Solution {}
-
-// Definition for a binary tree node.
-#[derive(Debug, PartialEq, Eq)]
-pub struct TreeNode {
-  pub val: i32,
-  pub left: Option<Rc<RefCell<TreeNode>>>,
-  pub right: Option<Rc<RefCell<TreeNode>>>,
-}
-
-impl TreeNode {
-  #[inline]
-  pub fn new(val: i32) -> Self {
-    TreeNode {
-      val,
-      left: None,
-      right: None
-    }
-  }
-}
-use std::rc::Rc;
-use std::cell::RefCell;
 impl Solution {
-    pub fn sorted_array_to_bst(nums: Vec<i32>) -> Option<Rc<RefCell<TreeNode>>> {
-        Solution::helper(&nums, 0, nums.len())
-    }
-    fn helper(nums: &Vec<i32>, start_idx: usize, end_idx: usize) -> Option<Rc<RefCell<TreeNode>>> {
-        if start_idx == end_idx {
-            return None;
+    pub fn generate(num_rows: i32) -> Vec<Vec<i32>> {
+        let mut result: Vec<Vec<i32>> = vec![];
+        for idx in 0..(num_rows as usize) {
+            let mut curr = vec![1];
+            if idx > 0 {
+                let prev = &result[idx - 1];
+                for i in 1..prev.len() {
+                    curr.push(prev[i - 1] + prev[i]);
+                }
+                curr.push(1);
+            }
+            result.push(curr);
         }
-        let mid_idx = start_idx + ((end_idx - start_idx) >> 1);
-        let mid_num = nums[mid_idx];
-        let mut node = TreeNode::new(mid_num);
-        node.left = Solution::helper(nums, start_idx, mid_idx);
-        node.right = Solution::helper(nums, mid_idx + 1, end_idx);
-        Some(Rc::new(RefCell::new(node)))
+        result
     }
 }
