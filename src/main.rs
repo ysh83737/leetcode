@@ -1,15 +1,19 @@
 fn main() {
-    println!("{:?}", Solution::get_row(30));
+    assert_eq!(Solution::max_profit(vec![7,1,5,3,6,4]), 5);
 }
 
 struct Solution {}
 impl Solution {
-    pub fn get_row(row_index: i32) -> Vec<i64> {
-        let row_index = row_index as i64;
-        let mut result: Vec<i64> = vec![0; (row_index + 1) as usize];
-        result[0] = 1;
-        for idx in 1..=(row_index) {
-            result[idx as usize] = result[(idx - 1) as usize] * (row_index - idx + 1) / idx;
+    pub fn max_profit(prices: Vec<i32>) -> i32 {
+        let mut result = 0;
+        let mut min_price = i32::MAX;
+        for i in 0..prices.len() {
+            let price = prices[i];
+            if price < min_price {
+                min_price = price;
+            } else if (price - min_price) > result {
+                result = price - min_price;
+            }
         }
         result
     }
