@@ -1,22 +1,17 @@
 fn main() {
-    let result = Solution::generate(5);
-    println!("{:?}", result);
+    println!("{:?}", Solution::get_row(3));
 }
 
 struct Solution {}
 impl Solution {
-    pub fn generate(num_rows: i32) -> Vec<Vec<i32>> {
-        let mut result: Vec<Vec<i32>> = vec![];
-        for idx in 0..(num_rows as usize) {
-            let mut curr = vec![1];
-            if idx > 0 {
-                let prev = &result[idx - 1];
-                for i in 1..prev.len() {
-                    curr.push(prev[i - 1] + prev[i]);
-                }
-                curr.push(1);
+    pub fn get_row(row_index: i32) -> Vec<i32> {
+        let mut result: Vec<i32> = vec![1];
+        for row in 1..=(row_index as usize) {
+            result.push(1);
+            for idx in (1..row).rev() {
+                result[idx] += result[idx - 1];
             }
-            result.push(curr);
+            println!("{:?}", result);
         }
         result
     }
