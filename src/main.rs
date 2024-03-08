@@ -1,19 +1,13 @@
 fn main() {
-    assert_eq!(Solution::max_profit(vec![7,1,5,3,6,4]), 5);
+    assert_eq!(Solution::single_number(vec![2,2,1]), 1);
 }
 
 struct Solution {}
 impl Solution {
-    pub fn max_profit(prices: Vec<i32>) -> i32 {
-        let mut j = 0;
+    pub fn single_number(nums: Vec<i32>) -> i32 {
         let mut result = 0;
-        for i in 1..prices.len() {
-            let profit = prices[i] - prices[j];
-            if profit > result {
-                result = profit;
-            } else if profit < 0 {
-                j = i;
-            }
+        for i in 0..nums.len() {
+            result ^= nums[i];
         }
         result
     }
