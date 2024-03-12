@@ -1,22 +1,19 @@
 fn main() {
-    assert_eq!(Solution::majority_element(vec![2,2,1,1,1,2,2]), 2);
+    assert_eq!(Solution::contains_duplicate(vec![1,2,3,1]), true);
+    assert_eq!(Solution::contains_duplicate(vec![1,1,1,3,3,4,3,2,4,2]), true);
 }
 
 struct Solution {}
 impl Solution {
-    pub fn majority_element(nums: Vec<i32>) -> i32 {
-        let mut result = 0;
-        let mut count = 0;
+    pub fn contains_duplicate(nums: Vec<i32>) -> bool {
+        use std::collections::HashSet;
+        let mut set = HashSet::new();
         for num in nums {
-            if count == 0 {
-                result = num;
+            if set.contains(&num) {
+                return true;
             }
-            if num == result {
-                count += 1;
-            } else {
-                count -= 1;
-            }
+            set.insert(num);
         }
-        result
+        false
     }
 }
