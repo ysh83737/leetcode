@@ -7,28 +7,22 @@ fn main() {
 struct Solution {}
 impl Solution {
     pub fn summary_ranges(nums: Vec<i32>) -> Vec<String> {
+        let len = nums.len();
         let mut result = vec![];
-        if nums.len() == 0 {
-            return result;
-        }
-        let mut start = nums[0];
-        let mut end = nums[0];
-        for i in 1..nums.len() {
-            let num = nums[i];
-            if num > end + 1 {
-                Solution::push_range(&mut result, start, end);
-                start = num;
+        let mut i = 0;
+        while i < len {
+            let start = nums[i];
+            while i < len - 1 && nums[i] + 1 == nums[i + 1] {
+                i += 1;
             }
-            end= num;
+            let end = nums[i];
+            if start == end {
+                result.push(format!("{}", start));
+            } else {
+                result.push(format!("{}->{}", start, end));
+            }
+            i += 1;
         }
-        Solution::push_range(&mut result, start, end);
         result
-    }
-    fn push_range(ranges: &mut Vec<String>, start: i32, end: i32) -> () {
-        if start == end {
-            ranges.push(format!("{}", start));
-        } else {
-            ranges.push(format!("{}->{}", start, end));
-        }
     }
 }
