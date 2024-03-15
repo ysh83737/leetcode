@@ -6,10 +6,10 @@ struct Solution {}
 impl Solution {
     pub fn missing_number(nums: Vec<i32>) -> i32 {
         let n = nums.len() as i32;
-        let mut sum = 0;
-        for num in nums {
-            sum += num;
+        let mut result = 0;
+        for i in 1..=n {
+            result ^= i ^ nums[(i - 1) as usize];
         }
-        n * (n + 1) / 2 - sum
+        result
     }
 }
