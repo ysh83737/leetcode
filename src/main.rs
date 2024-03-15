@@ -1,20 +1,25 @@
 fn main() {
-    let mut nums = vec![0,1,0,3,12];
-    Solution::move_zeroes(&mut nums);
-    assert_eq!(nums, vec![1,3,12,0,0]);
+    let nums = vec![-2, 0, 3, -5, 2, -1];
+    let num_array = NumArray::new(nums);
+    assert_eq!(num_array.sum_range(0, 2), 1);
+    assert_eq!(num_array.sum_range(2, 5), -1);
+    assert_eq!(num_array.sum_range(0, 5), -3);
 }
 
-struct Solution {}
-impl Solution {
-    pub fn move_zeroes(nums: &mut Vec<i32>) {
-        let mut slow = 0;
-        let mut fast = 0;
-        while fast < nums.len() {
-            if nums[fast] != 0 {
-                (nums[slow], nums[fast]) = (nums[fast], nums[slow]);
-                slow += 1;
-            }
-            fast += 1;
+struct NumArray {
+    nums: Vec<i32>,
+}
+
+impl NumArray {
+    fn new(nums: Vec<i32>) -> Self {
+        NumArray { nums }
+    }
+    fn sum_range(&self, left: i32, right: i32) -> i32 {
+        let nums = &self.nums;
+        let mut result = 0;
+        for i in left..=right {
+            result += nums[i as usize];
         }
+        result
     }
 }
