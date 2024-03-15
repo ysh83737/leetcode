@@ -8,18 +8,22 @@ fn main() {
 
 struct NumArray {
     nums: Vec<i32>,
+    sums: Vec<i32>,
 }
 
 impl NumArray {
     fn new(nums: Vec<i32>) -> Self {
-        NumArray { nums }
+        let mut sums = vec![];
+        let mut temp = 0;
+        for num in nums.iter() {
+            temp += num;
+            sums.push(temp);
+        }
+        NumArray { nums, sums }
     }
     fn sum_range(&self, left: i32, right: i32) -> i32 {
         let nums = &self.nums;
-        let mut result = 0;
-        for i in left..=right {
-            result += nums[i as usize];
-        }
-        result
+        let sums = &self.sums;
+        sums[right as usize] - sums[left as usize] + nums[left as usize]
     }
 }
