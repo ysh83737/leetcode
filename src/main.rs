@@ -7,15 +7,11 @@ fn main() {
 struct Solution {}
 impl Solution {
     pub fn move_zeroes(nums: &mut Vec<i32>) {
-        let n = nums.len();
         let mut slow = 0;
         let mut fast = 0;
-        while slow < n && fast < n {
-            if nums[slow] != 0 {
-                slow += 1;
-            } else if nums[fast] != 0 {
-                nums[slow] = nums[fast];
-                nums[fast] = 0;
+        while fast < nums.len() {
+            if nums[fast] != 0 {
+                (nums[slow], nums[fast]) = (nums[fast], nums[slow]);
                 slow += 1;
             }
             fast += 1;
