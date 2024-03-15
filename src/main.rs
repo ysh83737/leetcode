@@ -1,15 +1,24 @@
 fn main() {
-    assert_eq!(Solution::missing_number(vec![3,0,1]), 2);
+    let mut nums = vec![0,1,0,3,12];
+    Solution::move_zeroes(&mut nums);
+    assert_eq!(nums, vec![1,3,12,0,0]);
 }
 
 struct Solution {}
 impl Solution {
-    pub fn missing_number(nums: Vec<i32>) -> i32 {
-        let n = nums.len() as i32;
-        let mut result = 0;
-        for i in 1..=n {
-            result ^= i ^ nums[(i - 1) as usize];
+    pub fn move_zeroes(nums: &mut Vec<i32>) {
+        let n = nums.len();
+        let mut slow = 0;
+        let mut fast = 0;
+        while slow < n && fast < n {
+            if nums[slow] != 0 {
+                slow += 1;
+            } else if nums[fast] != 0 {
+                nums[slow] = nums[fast];
+                nums[fast] = 0;
+                slow += 1;
+            }
+            fast += 1;
         }
-        result
     }
 }
