@@ -7,22 +7,26 @@ fn main() {
 struct Solution;
 impl Solution {
     pub fn intersect(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<i32> {
-        if nums1.len() > nums2.len() {
-            return  Solution::intersect(nums2, nums1);
-        }
-        use std::collections::HashMap;
-        let mut map: HashMap<i32, u32> = HashMap::new();
-        for num in nums1 {
-            map.entry(num).and_modify(|count| { *count += 1; }).or_insert(1);
-        }
+        let mut nums1 = nums1.clone();
+        let mut nums2 = nums2.clone();
+        nums1.sort();
+        nums2.sort();
+        // 基于排序的双指针实现
+
         let mut result = vec![];
-        for num in nums2 {
-            map.entry(num).and_modify(|count| {
-                if *count > 0 {
-                    result.push(num);
-                    *count -= 1;
-                }
-            });
+        let mut i = 0;
+        let mut j = 0;
+        while i < nums1.len() && j < nums2.len() {
+            let (n1, n2) = (nums1[i], nums2[j]);
+            if n1 == n2 {
+                result.push(n1);
+                i += 1;
+                j += 1;
+            } else if n1 > n2 {
+                j += 1;
+            } else {
+                i += 1;
+            }
         }
         result
     }
