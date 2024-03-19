@@ -11,41 +11,24 @@ impl Solution {
         let mut max1 = None;
         let mut max2 = None;
         let mut max3 = None;
-        for mut num in nums {
-            let o_num = Some(num);
-            if o_num == max1 || o_num == max2 || o_num == max3 {
+        for n in nums {
+            let mut num = Some(n);
+            if num == max1 || num == max2 || num == max3 {
                 continue;
             }
-            if max1 == None {
-                max1 = Some(num);
-                continue;
-            } else if let Some(n) = max1 {
-                if num > n {
-                    max1 = Some(num);
-                    num = n;
-                }
+            if num > max1 {
+                (num, max1) = (max1, num);
             }
-            if max2 == None {
-                max2 = Some(num);
-                continue;
-            } else if let Some(n) = max2 {
-                if num > n {
-                    max2 = Some(num);
-                    num = n;
-                }
+            if num > max2 {
+                (num, max2) = (max2, num);
             }
-            if max3 == None {
-                max3 = Some(num);
-                continue;
-            } else if let Some(n) = max3 {
-                if num > n {
-                    max3 = Some(num);
-                }
+            if num > max3 {
+                max3 = num;
             }
         }
-        if max3 == None {
-            return max1.unwrap();
+        match max3 {
+            Some(n) => n,
+            None => max1.unwrap()
         }
-        max3.unwrap()
     }
 }
