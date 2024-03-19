@@ -8,16 +8,13 @@ struct Solution;
 impl Solution {
     pub fn intersection(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<i32> {
         use std::collections::HashSet;
-        let mut set = HashSet::new();
-        for num in nums1 {
-            set.insert(num);
-        }
         let mut result = HashSet::new();
+        let set: HashSet<i32> = nums1.into_iter().collect();
         for num in nums2 {
             if set.contains(&num) {
                 result.insert(num);
             }
         }
-        result.iter().map(|num| num * 1).collect()
+        result.into_iter().collect()
     }
 }
