@@ -1,34 +1,23 @@
 fn main() {
-    assert_eq!(Solution::third_max(vec![3, 2, 1]), 1);
-    assert_eq!(Solution::third_max(vec![2, 1]), 2);
-    assert_eq!(Solution::third_max(vec![2, 2, 3, 1]), 1);
-    assert_eq!(Solution::third_max(vec![1,2,-2147483648]), -2147483648);
+    assert_eq!(Solution::find_disappeared_numbers(vec![4,3,2,7,8,2,3,1]), vec![5,6]);
+    assert_eq!(Solution::find_disappeared_numbers(vec![1,1]), vec![2]);
 }
 
 struct Solution;
 impl Solution {
-    pub fn third_max(nums: Vec<i32>) -> i32 {
-        let mut max1 = None;
-        let mut max2 = None;
-        let mut max3 = None;
-        for n in nums {
-            let mut num = Some(n);
-            if num == max1 || num == max2 || num == max3 {
-                continue;
-            }
-            if num > max1 {
-                (num, max1) = (max1, num);
-            }
-            if num > max2 {
-                (num, max2) = (max2, num);
-            }
-            if num > max3 {
-                max3 = num;
-            }
+    pub fn find_disappeared_numbers(mut nums: Vec<i32>) -> Vec<i32> {
+        let n = nums.len();
+        for i in 0..n {
+            let num = nums[i];
+            let index = (num - 1) as usize % n;
+            nums[index] += n as i32;
         }
-        match max3 {
-            Some(n) => n,
-            None => max1.unwrap()
-        }
+        println!("nums={:?}", nums);
+        nums.into_iter().enumerate().filter_map(|(i, x)| {
+            if x > n as i32 {
+                return None
+            }
+            Some(i as i32 + 1)
+        }).collect()
     }
 }
