@@ -1,33 +1,27 @@
+use std::cmp::max;
+
 fn main() {
-    assert_eq!(Solution::island_perimeter(vec![vec![0,1,0,0],vec![1,1,1,0],vec![0,1,0,0],vec![1,1,0,0]]), 16);
+    assert_eq!(Solution::find_max_consecutive_ones(vec![1,1,0,1,1,1]), 3);
+    assert_eq!(Solution::find_max_consecutive_ones(vec![1,1,0,0,0,0,0,0]), 2);
+    assert_eq!(Solution::find_max_consecutive_ones(vec![1,1,0,0,1,0]), 2);
+    assert_eq!(Solution::find_max_consecutive_ones(vec![1,0,0,0]), 1);
+    assert_eq!(Solution::find_max_consecutive_ones(vec![0,0,1,0,0,0]), 1);
+    assert_eq!(Solution::find_max_consecutive_ones(vec![0,0,0,0]), 0);
 }
 
 struct Solution;
 
 impl Solution {
-    pub fn island_perimeter(grid: Vec<Vec<i32>>) -> i32 {
-        const LANG: i32 = 1;
-        const NOT_LANG: i32 = 0;
-
+    pub fn find_max_consecutive_ones(nums: Vec<i32>) -> i32 {
         let mut result = 0;
-        for (i, row) in grid.iter().enumerate() {
-            for (j, value) in row.iter().enumerate() {
-                if value == &LANG {
-                    result += 4;
-                    if i > 0 {
-                        let top = grid.get(i - 1).and_then(|top_row| top_row.get(j)).unwrap_or(&NOT_LANG);
-                        if top == &LANG {
-                            result -= 2;
-                        }
-                    }
-                    if j > 0 {
-                        let left = row.get(j - 1).unwrap_or(&NOT_LANG);
-                        if left == &LANG {
-                            result -= 2;
-                        }
-                    }
-                }
+        let mut temp = 0;
+        for num in nums {
+            if num == 1 {
+                temp += 1;
+            } else {
+                temp = 0;
             }
+            result = max(result, temp);
         }
         result
     }
