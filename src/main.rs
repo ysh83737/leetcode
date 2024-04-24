@@ -1,23 +1,30 @@
 fn main() {
-    assert_eq!(Solution::find_disappeared_numbers(vec![4,3,2,7,8,2,3,1]), vec![5,6]);
-    assert_eq!(Solution::find_disappeared_numbers(vec![1,1]), vec![2]);
+    assert_eq!(Solution::find_content_children(vec![1,2,3], vec![1,1]), 1);
+    assert_eq!(Solution::find_content_children(vec![1,2], vec![1,2,3]), 2);
+    assert_eq!(Solution::find_content_children(vec![1,2,3], vec![1,2,3]), 3);
+    assert_eq!(Solution::find_content_children(vec![10,9,8,7,10,9,8,7], vec![10,9,8,7]), 4);
 }
 
 struct Solution;
+
 impl Solution {
-    pub fn find_disappeared_numbers(mut nums: Vec<i32>) -> Vec<i32> {
-        let n = nums.len();
-        for i in 0..n {
-            let num = nums[i];
-            let index = (num - 1) as usize % n;
-            nums[index] += n as i32;
-        }
-        println!("nums={:?}", nums);
-        nums.into_iter().enumerate().filter_map(|(i, x)| {
-            if x > n as i32 {
-                return None
+    pub fn find_content_children(mut g: Vec<i32>, mut s: Vec<i32>) -> i32 {
+        let mut result = 0;
+        g.sort();
+        s.sort();
+
+        let mut i = 0;
+        let mut j = 0;
+        while i < g.len() && j < s.len() {
+            let g_num = g[i];
+            let s_num = s[j];
+            if s_num >= g_num {
+                result += 1;
+                i += 1;
+            } else {
             }
-            Some(i as i32 + 1)
-        }).collect()
+            j += 1;
+        }
+        result
     }
 }
