@@ -1,29 +1,33 @@
 fn main() {
-    assert_eq!(Solution::find_content_children(vec![1,2,3], vec![1,1]), 1);
-    assert_eq!(Solution::find_content_children(vec![1,2], vec![1,2,3]), 2);
-    assert_eq!(Solution::find_content_children(vec![1,2,3], vec![1,2,3]), 3);
-    assert_eq!(Solution::find_content_children(vec![10,9,8,7,10,9,8,7], vec![10,9,8,7]), 4);
+    assert_eq!(Solution::island_perimeter(vec![vec![0,1,0,0],vec![1,1,1,0],vec![0,1,0,0],vec![1,1,0,0]]), 16);
 }
 
 struct Solution;
 
 impl Solution {
-    pub fn find_content_children(mut g: Vec<i32>, mut s: Vec<i32>) -> i32 {
-        let mut result = 0;
-        g.sort();
-        s.sort();
+    pub fn island_perimeter(grid: Vec<Vec<i32>>) -> i32 {
+        const LANG: i32 = 1;
+        const NOT_LANG: i32 = 0;
 
-        let mut i = 0;
-        let mut j = 0;
-        while i < g.len() && j < s.len() {
-            let g_num = g[i];
-            let s_num = s[j];
-            if s_num >= g_num {
-                result += 1;
-                i += 1;
-            } else {
+        let mut result = 0;
+        for (i, row) in grid.iter().enumerate() {
+            for (j, value) in row.iter().enumerate() {
+                if value == &LANG {
+                    result += 4;
+                    if i > 0 {
+                        let top = grid.get(i - 1).and_then(|top_row| top_row.get(j)).unwrap_or(&NOT_LANG);
+                        if top == &LANG {
+                            result -= 2;
+                        }
+                    }
+                    if j > 0 {
+                        let left = row.get(j - 1).unwrap_or(&NOT_LANG);
+                        if left == &LANG {
+                            result -= 2;
+                        }
+                    }
+                }
             }
-            j += 1;
         }
         result
     }
