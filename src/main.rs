@@ -1,29 +1,27 @@
-use std::collections::VecDeque;
+use std::collections::{HashMap, VecDeque};
 
 fn main() {
-    assert_eq!(Solution::next_greater_elements(vec![1,2,1]), vec![2,-1,2]);
-    assert_eq!(Solution::next_greater_elements(vec![1,2,3,4,3]), vec![2,3,4,-1,4]);
-    assert_eq!(Solution::next_greater_elements(vec![100,1,11,1,120,111,123,1,-1,-100]), vec![120,11,120,120,123,123,-1,100,100,100]);
+    assert_eq!(Solution::next_greater_element(vec![4,1,2], vec![1,3,4,2]), vec![-1,3,-1]);
+    assert_eq!(Solution::next_greater_element(vec![2,4], vec![1,2,3,4]), vec![3, -1]);
 }
 
 struct Solution;
 
 impl Solution {
-    pub fn next_greater_elements(nums: Vec<i32>) -> Vec<i32> {
-        let n = nums.len();
-        let mut result = vec![-1; n];
+    pub fn next_greater_element(nums1: Vec<i32>, nums2: Vec<i32>) -> Vec<i32> {
+        // nums2中所有值对应的答案Map
+        let mut ans_map = HashMap::new();
+
+        // 单调栈
         let mut stack = VecDeque::new();
-        for i in 0..(2 * n - 1) {
-            let index = i % n;
-            let num = nums[index];
-            while stack.len() > 0 && nums[*stack.front().unwrap()] < num {
-                let top = *stack.front().unwrap();
-                result[top] = num;
+        for (i, &num) in nums2.iter().enumerate() {
+            while stack.len() > 0 && nums2[*stack.front().unwrap()] < num {
+                ans_map.insert(nums2[*stack.front().unwrap()], num);
                 stack.pop_front();
             }
-            stack.push_front(index);
+            stack.push_front(i);
         }
 
-        result
+        nums1.iter().map(|x| *ans_map.get(x).unwrap_or(&-1)).collect()
     }
 }
