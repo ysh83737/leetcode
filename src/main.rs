@@ -1,4 +1,4 @@
-use std::collections::{HashMap, VecDeque};
+use std::collections::HashMap;
 
 fn main() {
     assert_eq!(Solution::next_greater_elements(vec![1,2,1]), vec![2,-1,2]);
@@ -14,26 +14,36 @@ impl Solution {
         let mut ans_map = HashMap::new();
 
         // 单调栈
-        let mut stack = VecDeque::new();
+        let mut stack = vec![];
         let n = nums.len();
-        for (i, &num) in nums.repeat(2).iter().enumerate().rev() {
-            let index = i % n;
-            while let Some(&top) = stack.front() {
+        let mut i = n * 2;
+        while i > 0 {
+            let index = (i - 1) % n;
+            let num = nums[index];
+
+            let mut j = stack.len();
+            while j > 0 {
+                let top = stack[j - 1];
                 if top > num {
                     ans_map.insert(index, top);
                     break;
                 } else {
-                    stack.pop_front();
+                    stack.pop();
                 }
+                j -= 1;
             }
-            stack.push_front(num);
+            stack.push(num);
+            i -= 1;
         }
 
-        nums.iter().enumerate().map(|(i, _)| {
+        let mut result = vec![];
+        for i in 0..n {
             if let Some(&ans) = ans_map.get(&i) {
-                return ans;
+                result.push(ans);
+            } else {
+                result.push(-1);
             }
-            -1
-        }).collect()
+        }
+        result
     }
 }
