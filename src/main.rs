@@ -14,16 +14,12 @@ impl Solution {
 
         // 单调栈
         let mut stack = VecDeque::new();
-        for &num in nums2.iter().rev() {
-            while let Some(&top) = stack.front() {
-                if top > num {
-                    ans_map.insert(num, top);
-                    break;
-                } else {
-                    stack.pop_front();
-                }
+        for (i, &num) in nums2.iter().enumerate() {
+            while stack.len() > 0 && nums2[*stack.front().unwrap()] < num {
+                ans_map.insert(nums2[*stack.front().unwrap()], num);
+                stack.pop_front();
             }
-            stack.push_front(num);
+            stack.push_front(i);
         }
 
         nums1.iter().map(|x| *ans_map.get(x).unwrap_or(&-1)).collect()
