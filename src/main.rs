@@ -7,24 +7,19 @@ fn main() {
 struct Solution;
 
 impl Solution {
-    pub fn find_relative_ranks(mut score: Vec<i32>) -> Vec<String> {
+    pub fn find_relative_ranks(score: Vec<i32>) -> Vec<String> {
         let medals = ["Gold Medal", "Silver Medal", "Bronze Medal"];
-        let n = score.len();
-        let mut result = vec![String::new(); n];
-        for i in 0..n {
-            let max_index = Solution::find_max_index(&score);
-            result[max_index] = medals.get(i).unwrap_or(&(i + 1).to_string().as_str()).to_string();
-            score[max_index] = -1;
-        }
+        let mut result = vec![String::new(); score.len()];
+
+        let mut score_indeies: Vec<_> = score.iter().enumerate().collect();
+        score_indeies.sort_by(|a, b| b.1.cmp(a.1));
+
+        score_indeies.iter().enumerate().for_each(|(i, (index, _))| {
+            result[*index] = medals
+                .get(i)
+                .unwrap_or(&(i + 1).to_string().as_str())
+                .to_string();
+        });
         result
-    }
-    pub fn find_max_index(score: &Vec<i32>) -> usize {
-        let mut index = 0;
-        for i in 1..score.len() {
-            if score[i] > score[index] {
-                index = i;
-            }
-        }
-        index
     }
 }
