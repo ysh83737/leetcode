@@ -11,19 +11,16 @@ struct Solution;
 impl Solution {
     pub fn distribute_candies(candy_type: Vec<i32>) -> i32 {
         let n = candy_type.len();
-        let mut rest = n / 2;
+        let half_n = n / 2;
 
         let mut eaten = HashSet::new();
         for candy in candy_type {
-            if eaten.contains(&candy) == false {
-                eaten.insert(candy);
-                rest -= 1;
-                if rest == 0 {
-                    break;
-                }
+            eaten.insert(candy);
+            if eaten.len() == half_n {
+                break;
             }
         }
 
-        (n / 2 - rest) as i32
+        eaten.len() as i32
     }
 }
