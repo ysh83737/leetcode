@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::{cmp::min, collections::HashSet};
 
 fn main() {
     assert_eq!(Solution::distribute_candies(vec![1,1,2,2,3,3]), 3);
@@ -11,16 +11,7 @@ struct Solution;
 impl Solution {
     pub fn distribute_candies(candy_type: Vec<i32>) -> i32 {
         let n = candy_type.len();
-        let half_n = n / 2;
-
-        let mut eaten = HashSet::new();
-        for candy in candy_type {
-            eaten.insert(candy);
-            if eaten.len() == half_n {
-                break;
-            }
-        }
-
-        eaten.len() as i32
+        let candy_set: HashSet<i32> = HashSet::from_iter(candy_type);
+        min(candy_set.len(), n / 2) as i32
     }
 }
