@@ -40,9 +40,6 @@ impl TrieNode {
             children: HashMap::new()
         }
     }
-    pub fn insert(&mut self, ch: char) {
-        self.children.insert(ch, TrieNode::new());
-    }
     pub fn entries(&self) -> Vec<(String, i32)> {
         let mut output = vec![];
         self.children.iter().for_each(|(ch, child)| {
@@ -75,10 +72,7 @@ impl Trie {
     pub fn insert(&mut self, word: String) {
         let mut node = &mut self.root;
         for ch in word.chars() {
-            if node.children.contains_key(&ch) == false {
-                node.insert(ch);
-            }
-            node = node.children.get_mut(&ch).unwrap();
+            node = node.children.entry(ch).or_insert(TrieNode::new());
         }
         node.count += 1;
     }
