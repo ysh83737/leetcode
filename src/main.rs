@@ -1,17 +1,27 @@
-use std::{cmp::min, collections::HashSet};
-
 fn main() {
-    assert_eq!(Solution::distribute_candies(vec![1,1,2,2,3,3]), 3);
-    assert_eq!(Solution::distribute_candies(vec![1,1,2,3]), 2);
-    assert_eq!(Solution::distribute_candies(vec![6,6,6,6]), 1);
+    assert_eq!(Solution::top_k_frequent(
+        vec!["i", "love", "leetcode", "i", "love", "coding"].iter().map(|x| { x.to_string() }).collect(),
+        2
+    ), vec!["i", "love"]);
+    assert_eq!(Solution::top_k_frequent(
+        vec!["the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"].iter().map(|x| { x.to_string() }).collect(),
+        4
+    ), ["the", "is", "sunny", "day"]);
 }
 
 struct Solution;
 
 impl Solution {
-    pub fn distribute_candies(candy_type: Vec<i32>) -> i32 {
-        let n = candy_type.len();
-        let candy_set: HashSet<i32> = HashSet::from_iter(candy_type);
-        min(candy_set.len(), n / 2) as i32
+    pub fn top_k_frequent(words: Vec<String>, k: i32) -> Vec<String> {
+        let mut word_map = std::collections::HashMap::new();
+        words.into_iter().for_each(|word| {
+            word_map.entry(word).and_modify(|e| *e += 1).or_insert(1);
+        });
+
+        let mut entries: Vec<_> = word_map.into_iter().collect();
+        entries.sort_by(|(word1, count1), (word2, count2)| {
+            count2.cmp(count1).then(word1.cmp(word2))
+        });
+        entries.into_iter().take(k as usize).map(|x| x.0).collect()
     }
 }
