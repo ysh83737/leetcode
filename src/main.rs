@@ -1,79 +1,32 @@
-use std::collections::HashMap;
-
 fn main() {
-    assert_eq!(Solution::top_k_frequent(
-        vec!["i", "love", "leetcode", "i", "love", "coding"].iter().map(|x| { x.to_string() }).collect(),
-        2
-    ), vec!["i", "love"]);
-    assert_eq!(Solution::top_k_frequent(
-        vec!["the", "day", "is", "sunny", "the", "the", "the", "sunny", "is", "is"].iter().map(|x| { x.to_string() }).collect(),
-        4
-    ), ["the", "is", "sunny", "day"]);
+    assert_eq!(Solution::find_lhs(vec![1,3,2,2,5,2,3,7]), 5);
+    assert_eq!(Solution::find_lhs(vec![1,2,3,4]), 2);
+    assert_eq!(Solution::find_lhs(vec![1,1,1,1]), 0);
+    assert_eq!(Solution::find_lhs(vec![1,3,5,7,9]), 0);
+    assert_eq!(Solution::find_lhs(vec![1,3,3,3,3,4]), 5);
+    assert_eq!(Solution::find_lhs(vec![1,2,2,1]), 4);
+    assert_eq!(Solution::find_lhs(vec![1]), 0);
 }
 
 struct Solution;
 
 impl Solution {
-    pub fn top_k_frequent(words: Vec<String>, k: i32) -> Vec<String> {
-        let mut trie = Trie::new();
-        words.into_iter().for_each(|word| {
-            trie.insert(word);
-        });
+    pub fn find_lhs(mut nums: Vec<i32>) -> i32 {
+        nums.sort_by(|a, b| a.cmp(b));
 
-        let mut entries = trie.root.entries();
-        entries.sort_by(|(word1, count1), (word2, count2)| {
-            count2.cmp(count1).then(word1.cmp(word2))
-        });
-        entries.into_iter().take(k as usize).map(|x| x.0).collect()
-    }
-}
+        let mut i = 0;
+        let mut j = 0;
+        let mut result = 0;
 
-struct TrieNode {
-    pub count: i32,
-    pub children: HashMap<char, TrieNode>,
-}
-
-impl TrieNode {
-    pub fn new() -> TrieNode {
-        TrieNode{
-            count: 0,
-            children: HashMap::new()
-        }
-    }
-    pub fn entries(&self) -> Vec<(String, i32)> {
-        let mut output = vec![];
-        self.children.iter().for_each(|(ch, child)| {
-            if child.count > 0 {
-                output.push((ch.to_string(), child.count));
+        while j < nums.len() {
+            while i < j && nums[j] - nums[i] > 1 {
+                i += 1;
             }
-            if child.children.len() > 0 {
-                child.entries().into_iter().for_each(|(sub, count)| {
-                    output.push((
-                        [ch.to_string(), sub].concat(),
-                        count
-                    ))
-                });
+            if nums[j] - nums[i] == 1 {
+                result = result.max(j - i + 1);
             }
-        });
-        output
-    }
-}
-
-struct Trie {
-    pub root: TrieNode,
-}
-
-impl Trie {
-    pub fn new() -> Trie {
-        Trie {
-            root: TrieNode::new()
+            j += 1;
         }
-    }
-    pub fn insert(&mut self, word: String) {
-        let mut node = &mut self.root;
-        for ch in word.chars() {
-            node = node.children.entry(ch).or_insert(TrieNode::new());
-        }
-        node.count += 1;
+        result as i32
     }
 }
