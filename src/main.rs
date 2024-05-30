@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 fn main() {
     assert_eq!(Solution::top_k_frequent(
         vec!["i", "love", "leetcode", "i", "love", "coding"].iter().map(|x| { x.to_string() }).collect(),
@@ -13,15 +15,71 @@ struct Solution;
 
 impl Solution {
     pub fn top_k_frequent(words: Vec<String>, k: i32) -> Vec<String> {
-        let mut word_map = std::collections::HashMap::new();
+        let mut trie = Trie::new();
         words.into_iter().for_each(|word| {
-            word_map.entry(word).and_modify(|e| *e += 1).or_insert(1);
+            trie.insert(word);
         });
 
-        let mut entries: Vec<_> = word_map.into_iter().collect();
+        let mut entries = trie.root.entries();
         entries.sort_by(|(word1, count1), (word2, count2)| {
             count2.cmp(count1).then(word1.cmp(word2))
         });
         entries.into_iter().take(k as usize).map(|x| x.0).collect()
+    }
+}
+
+struct TrieNode {
+    pub count: i32,
+    pub children: HashMap<char, TrieNode>,
+}
+
+impl TrieNode {
+    pub fn new() -> TrieNode {
+        TrieNode{
+            count: 0,
+            children: HashMap::new()
+        }
+    }
+    pub fn insert(&mut self, ch: char) {
+        self.children.insert(ch, TrieNode::new());
+    }
+    pub fn entries(&self) -> Vec<(String, i32)> {
+        let mut output = vec![];
+        self.children.iter().for_each(|(ch, child)| {
+            if child.count > 0 {
+                output.push((ch.to_string(), child.count));
+            }
+            if child.children.len() > 0 {
+                child.entries().into_iter().for_each(|(sub, count)| {
+                    output.push((
+                        [ch.to_string(), sub].concat(),
+                        count
+                    ))
+                });
+            }
+        });
+        output
+    }
+}
+
+struct Trie {
+    pub root: TrieNode,
+}
+
+impl Trie {
+    pub fn new() -> Trie {
+        Trie {
+            root: TrieNode::new()
+        }
+    }
+    pub fn insert(&mut self, word: String) {
+        let mut node = &mut self.root;
+        for ch in word.chars() {
+            if node.children.contains_key(&ch) == false {
+                node.insert(ch);
+            }
+            node = node.children.get_mut(&ch).unwrap();
+        }
+        node.count += 1;
     }
 }
