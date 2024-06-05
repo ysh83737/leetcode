@@ -1,38 +1,29 @@
 fn main() {
     assert_eq!(Solution::max_count(3, 3, vec![vec![2,2],vec![3,3]]), 4);
     assert_eq!(Solution::max_count(3, 3, vec![vec![2,2],vec![3,3],vec![3,3],vec![3,3],vec![2,2],vec![3,3],vec![3,3],vec![3,3],vec![2,2],vec![3,3],vec![3,3],vec![3,3]]), 4);
+    assert_eq!(Solution::max_count(3, 3, vec![]), 9);
+    assert_eq!(Solution::max_count(40000, 40000, vec![]), 40000 * 40000);
+    assert_eq!(Solution::max_count(40000, 40000, vec![vec![3000, 3000]]), 3000 * 3000);
+    assert_eq!(Solution::max_count(40000, 40000, vec![vec![30000, 30000]]), 30000 * 30000);
 }
 
 struct Solution;
 
 impl Solution {
     pub fn max_count(m: i32, n: i32, ops: Vec<Vec<i32>>) -> i32 {
-        let mut mat = vec![vec![0; n as usize]; m as usize];
+        if ops.len() == 0 {
+            return m * n;
+        }
 
-        ops.iter().for_each(|x| {
-            let a = x[0] as usize;
-            let b = x[1] as usize;
-            for x in 0..a {
-                let row = &mut mat[x];
-                for y in 0..b {
-                    row[y] += 1;
-                }
-            }
-        });
+        let mut x = ops[0][0];
+        let mut y = ops[0][1];
+        for i in 1..ops.len() {
+            let a = ops[i][0];
+            let b = ops[i][1];
+            x = x.min(a);
+            y = y.min(b);
+        }
 
-        let mut result = 0;
-        let mut max = 0;
-        mat.iter().for_each(|row| {
-            row.iter().for_each(|&value| {
-                if value > max {
-                    max = value;
-                    result = 1;
-                } else if value == max {
-                    result += 1;
-                }
-            });
-        });
-
-        result
+        x * y
     }
 }
