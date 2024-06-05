@@ -11,18 +11,14 @@ struct Solution;
 
 impl Solution {
     pub fn max_count(m: i32, n: i32, ops: Vec<Vec<i32>>) -> i32 {
-        if ops.len() == 0 {
-            return m * n;
-        }
-
-        let mut x = ops[0][0];
-        let mut y = ops[0][1];
-        for i in 1..ops.len() {
-            let a = ops[i][0];
-            let b = ops[i][1];
+        let mut x = m;
+        let mut y = n;
+        ops.iter().for_each(|op| {
+            let a = op[0];
+            let b = op[1];
             x = x.min(a);
             y = y.min(b);
-        }
+        });
 
         x * y
     }
