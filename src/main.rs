@@ -1,25 +1,35 @@
 fn main() {
-    assert_eq!(Solution::max_count(3, 3, vec![vec![2,2],vec![3,3]]), 4);
-    assert_eq!(Solution::max_count(3, 3, vec![vec![2,2],vec![3,3],vec![3,3],vec![3,3],vec![2,2],vec![3,3],vec![3,3],vec![3,3],vec![2,2],vec![3,3],vec![3,3],vec![3,3]]), 4);
-    assert_eq!(Solution::max_count(3, 3, vec![]), 9);
-    assert_eq!(Solution::max_count(40000, 40000, vec![]), 40000 * 40000);
-    assert_eq!(Solution::max_count(40000, 40000, vec![vec![3000, 3000]]), 3000 * 3000);
-    assert_eq!(Solution::max_count(40000, 40000, vec![vec![30000, 30000]]), 30000 * 30000);
+    assert_eq!(Solution::find_restaurant(
+        vec!["Shogun","Tapioca Express","Burger King","KFC"].iter().map(|x| x.to_string()).collect(),
+        vec!["Piatti","The Grill at Torrey Pines","Hungry Hunter Steakhouse","Shogun"].iter().map(|x| x.to_string()).collect()
+    ), vec!["Shogun"]);
+    assert_eq!(Solution::find_restaurant(
+            vec!["Shogun", "Tapioca Express", "Burger King", "KFC"].iter().map(|x| x.to_string()).collect(),
+            vec!["KFC", "Shogun", "Burger King"].iter().map(|x| x.to_string()).collect()
+        ), vec!["Shogun"]);
 }
 
 struct Solution;
 
 impl Solution {
-    pub fn max_count(m: i32, n: i32, ops: Vec<Vec<i32>>) -> i32 {
-        let mut x = m;
-        let mut y = n;
-        ops.iter().for_each(|op| {
-            let a = op[0];
-            let b = op[1];
-            x = x.min(a);
-            y = y.min(b);
+    pub fn find_restaurant(list1: Vec<String>, list2: Vec<String>) -> Vec<String> {
+        let mut map1 = std::collections::HashMap::new();
+        list1.iter().enumerate().for_each(|(i, item)| {
+            map1.insert(item, i);
         });
-
-        x * y
+        let mut result = vec![];
+        let mut min = list1.len() + list2.len();
+        list2.into_iter().enumerate().for_each(|(i, item)| {
+            if let Some(value) = map1.get(&item) {
+                let sum = value + i;
+                if sum == min {
+                    result.push(item);
+                } else if sum < min {
+                    min = sum;
+                    result = vec![item];
+                }
+            }
+        });
+        result
     }
 }
