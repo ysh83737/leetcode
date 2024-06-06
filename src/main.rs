@@ -13,13 +13,19 @@ struct Solution;
 
 impl Solution {
     pub fn find_restaurant(list1: Vec<String>, list2: Vec<String>) -> Vec<String> {
+        let (short, long) = if list1.len() < list2.len() {
+            (list1, list2)
+        } else {
+            (list1, list2)
+        };
         let mut map1 = std::collections::HashMap::new();
-        list1.iter().enumerate().for_each(|(i, item)| {
+        short.iter().enumerate().for_each(|(i, item)| {
             map1.insert(item, i);
         });
         let mut result = vec![];
-        let mut min = list1.len() + list2.len();
-        list2.into_iter().enumerate().for_each(|(i, item)| {
+        let mut min = short.len() + long.len();
+        for (i, item) in long.into_iter().enumerate() {
+            if i > min { break; }
             if let Some(value) = map1.get(&item) {
                 let sum = value + i;
                 if sum == min {
@@ -29,7 +35,7 @@ impl Solution {
                     result = vec![item];
                 }
             }
-        });
+        };
         result
     }
 }
