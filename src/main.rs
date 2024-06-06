@@ -1,41 +1,32 @@
 fn main() {
-    assert_eq!(Solution::find_restaurant(
-        vec!["Shogun","Tapioca Express","Burger King","KFC"].iter().map(|x| x.to_string()).collect(),
-        vec!["Piatti","The Grill at Torrey Pines","Hungry Hunter Steakhouse","Shogun"].iter().map(|x| x.to_string()).collect()
-    ), vec!["Shogun"]);
-    assert_eq!(Solution::find_restaurant(
-            vec!["Shogun", "Tapioca Express", "Burger King", "KFC"].iter().map(|x| x.to_string()).collect(),
-            vec!["KFC", "Shogun", "Burger King"].iter().map(|x| x.to_string()).collect()
-        ), vec!["Shogun"]);
+    assert_eq!(Solution::can_place_flowers(vec![1,0,0,0,1], 1), true);
+    assert_eq!(Solution::can_place_flowers(vec![1,0,0,0,1], 2), false);
+    assert_eq!(Solution::can_place_flowers(vec![0,0,0,0,1], 2), true);
+    assert_eq!(Solution::can_place_flowers(vec![0,0,0,1,0,1,0,0], 2), true);
+    assert_eq!(Solution::can_place_flowers(vec![0,0,0,0,1,0,1,0,0], 2), true);
 }
 
 struct Solution;
 
 impl Solution {
-    pub fn find_restaurant(list1: Vec<String>, list2: Vec<String>) -> Vec<String> {
-        let (short, long) = if list1.len() < list2.len() {
-            (list1, list2)
-        } else {
-            (list1, list2)
-        };
-        let mut map1 = std::collections::HashMap::new();
-        short.iter().enumerate().for_each(|(i, item)| {
-            map1.insert(item, i);
-        });
-        let mut result = vec![];
-        let mut min = short.len() + long.len();
-        for (i, item) in long.into_iter().enumerate() {
-            if i > min { break; }
-            if let Some(value) = map1.get(&item) {
-                let sum = value + i;
-                if sum == min {
-                    result.push(item);
-                } else if sum < min {
-                    min = sum;
-                    result = vec![item];
-                }
+    pub fn can_place_flowers(flowerbed: Vec<i32>, n: i32) -> bool {
+        let mut count = 0;
+        let mut index = 0;
+        for i in 0..flowerbed.len() {
+            let curr = flowerbed.get(i).unwrap();
+            if curr == &1 { continue; }
+
+            if index + 1 == i { continue; }
+            if i > 0 {
+                let prev = flowerbed.get(i - 1).unwrap_or(&0);
+                if prev == &1 { continue; }
             }
-        };
-        result
+
+            let next = flowerbed.get(i + 1).unwrap_or(&0);
+            if next == &1 { continue; }
+            index = i;
+            count += 1;
+        }
+        return count >= n;
     }
 }
