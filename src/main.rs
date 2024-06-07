@@ -13,24 +13,25 @@ struct Solution;
 
 impl Solution {
     pub fn can_place_flowers(flowerbed: Vec<i32>, n: i32) -> bool {
-        let m = flowerbed.len() as i32;
+        enum Prev { Nothing, Planted, Flowerbed }
+        let mut prev = Prev::Nothing;
         let mut count = 0;
-        let mut prev = -1;
-        for i in 0..m {
-            if flowerbed[i as usize] == 1 {
-                let gap = if prev < 0 {
-                    i
-                } else {
-                    i - prev - 2
-                };
-                count += gap / 2;
-                prev = i;
+        for item in flowerbed {
+            if item == 0 {
+                match prev {
+                    Prev::Nothing => {
+                        count += 1;
+                        prev = Prev::Planted;
+                    },
+                    _ => { prev = Prev::Nothing; }
+                }
+            } else {
+                match prev {
+                    Prev::Planted => count -= 1,
+                    _ => {}
+                }
+                prev = Prev::Flowerbed;
             }
-        }
-        if prev < 0 {
-            count += (m + 1) / 2;
-        } else {
-            count += (m - prev - 1) / 2;
         }
         count >= n
     }
