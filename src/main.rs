@@ -12,20 +12,16 @@ impl Solution {
     }
     pub fn find_max_sum(nums: Vec<i32>, k: i32) -> i32 {
         let n = nums.len();
-        let mut i = 0;
-        let mut j = 0;
+
         let mut sum = 0;
-        let mut max_sum = 0;
-        while j < n {
-            sum += nums[j];
-            if j < (k as usize) {
-                max_sum = sum;
-            } else {
-                sum -= nums[i];
-                max_sum = max_sum.max(sum);
-                i += 1;
-            }
-            j += 1;
+        for i in 0..k {
+            sum += nums[i as usize];
+        }
+
+        let mut max_sum = sum;
+        for i in (k as usize)..n {
+            sum += nums[i] - nums[i - k as usize];
+            max_sum = max_sum.max(sum);
         }
         max_sum
     }
