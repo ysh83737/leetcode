@@ -1,28 +1,24 @@
 fn main() {
-    assert_eq!(Solution::find_max_average(vec![1,12,-5,-6,50,3], 4), 12.75);
+    assert_eq!(Solution::find_error_nums(vec![1,2,2,4]), vec![2,3]);
 
 }
 
 struct Solution;
 
 impl Solution {
-    pub fn find_max_average(nums: Vec<i32>, k: i32) -> f64 {
-        let max_sum = Solution::find_max_sum(nums, k);
-        max_sum as f64 / k as f64
-    }
-    pub fn find_max_sum(nums: Vec<i32>, k: i32) -> i32 {
-        let n = nums.len();
-
-        let mut sum = 0;
-        for i in 0..k {
-            sum += nums[i as usize];
+    pub fn find_error_nums(nums: Vec<i32>) -> Vec<i32> {
+        let n = nums.len() as i32;
+        let mut sum = n * (n + 1) / 2;
+        let mut set = std::collections::HashSet::new();
+        let mut result = vec![];
+        for num in nums {
+            sum -= num;
+            if set.contains(&num) {
+                result.push(num);
+            }
+            set.insert(num);
         }
-
-        let mut max_sum = sum;
-        for i in (k as usize)..n {
-            sum += nums[i] - nums[i - k as usize];
-            max_sum = max_sum.max(sum);
-        }
-        max_sum
+        result.push(result[0] + sum);
+        result
     }
 }
