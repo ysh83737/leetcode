@@ -6,19 +6,24 @@ fn main() {
 struct Solution;
 
 impl Solution {
-    pub fn find_error_nums(nums: Vec<i32>) -> Vec<i32> {
-        let n = nums.len() as i32;
-        let mut sum = n * (n + 1) / 2;
-        let mut set = std::collections::HashSet::new();
-        let mut result = vec![];
-        for num in nums {
-            sum -= num;
-            if set.contains(&num) {
-                result.push(num);
+    pub fn find_error_nums(mut nums: Vec<i32>) -> Vec<i32> {
+        let n = nums.len();
+        nums.sort();
+
+        let mut result = vec![0, 0];
+        let mut prev = 0;
+        for &num in nums.iter() {
+            if num == prev {
+                result[0] = num;
+            } else if num != prev + 1 {
+                result[1] = prev + 1;
             }
-            set.insert(num);
+            prev = num;
         }
-        result.push(result[0] + sum);
+        if nums[n - 1] != n as i32 {
+            result[1] = n as i32;
+        }
+        
         result
     }
 }
