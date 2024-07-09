@@ -1,26 +1,30 @@
 fn main() {
     assert_eq!(Solution::find_error_nums(vec![1,2,2,4]), vec![2,3]);
     assert_eq!(Solution::find_error_nums(vec![1,1]), vec![1,2]);
+    assert_eq!(Solution::find_error_nums(vec![2,2]), vec![2,1]);
+    assert_eq!(Solution::find_error_nums(vec![3,2,2]), vec![2,1]);
 
 }
 
 struct Solution;
 
 impl Solution {
-    pub fn find_error_nums(nums: Vec<i32>) -> Vec<i32> {
-        let n = nums.len() as i32;
-
-        let mut map = std::collections::HashMap::new();
-        for num in nums {
-            map.entry(num).and_modify(|e| *e += 1).or_insert(1);
-        }
-
+    pub fn find_error_nums(mut nums: Vec<i32>) -> Vec<i32> {
+        let n = nums.len();
         let mut result = vec![0, 0];
-        for i in 1..=n {
-            match map.get(&i) {
-                Some(&2) => result[0] = i,
-                None => result[1] = i,
-                _ => ()
+        for i in 0..n {
+            let num = nums[i];
+            let value = num.abs();
+            let index = (value - 1) as usize;
+            if nums[index] < 0 {
+                result[0] = value;
+            } else {
+                nums[index] = -nums[index];
+            }
+        }
+        for i in 0..n {
+            if nums[i] > 0 {
+                result[1] = (i + 1) as i32;
             }
         }
         
