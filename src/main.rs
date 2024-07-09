@@ -9,25 +9,11 @@ fn main() {
 struct Solution;
 
 impl Solution {
-    pub fn find_error_nums(mut nums: Vec<i32>) -> Vec<i32> {
-        let n = nums.len();
-        let mut result = vec![0, 0];
-        for i in 0..n {
-            let num = nums[i];
-            let value = num.abs();
-            let index = (value - 1) as usize;
-            if nums[index] < 0 {
-                result[0] = value;
-            } else {
-                nums[index] = -nums[index];
-            }
-        }
-        for i in 0..n {
-            if nums[i] > 0 {
-                result[1] = (i + 1) as i32;
-            }
-        }
-        
-        result
+    pub fn find_error_nums(nums: Vec<i32>) -> Vec<i32> {
+        let n = nums.len() as i32;
+        let n_sum = n * (n + 1) / 2;
+        let sum: i32 = nums.iter().sum();
+        let set_sum: i32 = nums.into_iter().collect::<std::collections::HashSet<_>>().iter().sum();
+        vec![sum - set_sum, n_sum - set_sum]
     }
 }
