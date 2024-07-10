@@ -11,9 +11,34 @@ struct Solution;
 impl Solution {
     pub fn find_error_nums(nums: Vec<i32>) -> Vec<i32> {
         let n = nums.len() as i32;
-        let n_sum = n * (n + 1) / 2;
-        let sum: i32 = nums.iter().sum();
-        let set_sum: i32 = nums.into_iter().collect::<std::collections::HashSet<_>>().iter().sum();
-        vec![sum - set_sum, n_sum - set_sum]
+
+        let mut xor = 0;
+        for i in 1..=n {
+            xor ^= i ^ nums[i as usize - 1];
+        }
+
+        let lowbit = xor & -xor;
+        let mut num1 = 0;
+        let mut num2 = 0;
+        let mut grouping = |num: i32| {
+            if num & lowbit == 0 {
+                num1 ^= num;
+            } else {
+                num2 ^= num;
+            }
+        };
+        for i in 1..=n {
+            grouping(i);
+            grouping(nums[i as usize - 1]);
+        }
+
+        let mut result = vec![num1, num2];
+        for num in nums {
+            if num == num2 {
+                result.reverse();
+                break;
+            }
+        }
+        result
     }
 }
