@@ -7,8 +7,10 @@ fn main() {
 }
 
 struct Solution;
+
+const BIG: i32 = 1 << 30;
 impl Solution {
     pub fn is_power_of_two(n: i32) -> bool {
-        n > 0 && n & (-n) == n
+        n > 0 && BIG % n == 0
     }
 }
