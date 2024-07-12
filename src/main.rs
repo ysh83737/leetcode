@@ -6,15 +6,13 @@ fn main() {
 struct Solution;
 impl Solution {
     pub fn count_bits(n: i32) -> Vec<i32> {
-        let mut result = vec![];
-        for i in 0..=n {
-            let mut num = i;
-            let mut count_of_bit = 0;
-            while num > 0 {
-                count_of_bit += 1;
-                num = num & (num - 1);
+        let mut result = vec![0; n as usize + 1];
+        let mut high_bit = 0;
+        for i in 1..=n {
+            if i & (i - 1) == 0 {
+                high_bit = i;
             }
-            result.push(count_of_bit);
+            result[i as usize] = result[(i - high_bit) as usize] + 1;
         }
         result
     }
