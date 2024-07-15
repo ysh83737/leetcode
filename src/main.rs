@@ -1,15 +1,27 @@
 fn main() {
-    assert_eq!(Solution::is_power_of_four(16), true);
-    assert_eq!(Solution::is_power_of_four(5), false);
-    assert_eq!(Solution::is_power_of_four(1), true);
-    assert_eq!(Solution::is_power_of_four(8), false);
-    assert_eq!(Solution::is_power_of_four(0), false);
+    assert_eq!(Solution::find_the_difference(String::from("abcd"), String::from("abcde")), 'e');
+    assert_eq!(Solution::find_the_difference(String::from(""), String::from("y")), 'y');
+    assert_eq!(Solution::find_the_difference(String::from("a"), String::from("aa")), 'a');
 }
 
 struct Solution;
-const BITS: i32 = 0b01010101010101010101010101010101;
+use std::collections::HashMap;
 impl Solution {
-    pub fn is_power_of_four(n: i32) -> bool {
-        n & BITS > 0 && n & (n - 1) == 0
+    pub fn find_the_difference(s: String, t: String) -> char {
+        let mut map: HashMap<char, u32> = HashMap::new();
+        for ch in s.chars() {
+            map.entry(ch).and_modify(|e| *e += 1).or_insert(1);
+        }
+        for ch in t.chars() {
+            if let Some(count) = map.get_mut(&ch) {
+                if count == &0 {
+                    return ch;
+                }
+                *count -= 1;
+            } else {
+                return ch;
+            }
+        }
+        unreachable!()
     }
 }
