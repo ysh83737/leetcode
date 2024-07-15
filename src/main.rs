@@ -1,15 +1,15 @@
 fn main() {
-    assert_eq!(Solution::count_bits(2), vec![0,1,1]);
-    assert_eq!(Solution::count_bits(5), vec![0,1,1,2,1,2]);
+    assert_eq!(Solution::is_power_of_four(16), true);
+    assert_eq!(Solution::is_power_of_four(5), false);
+    assert_eq!(Solution::is_power_of_four(1), true);
+    assert_eq!(Solution::is_power_of_four(8), false);
+    assert_eq!(Solution::is_power_of_four(0), false);
 }
 
 struct Solution;
+const BITS: i32 = 0b01010101010101010101010101010101;
 impl Solution {
-    pub fn count_bits(n: i32) -> Vec<i32> {
-        let mut result = vec![0; n as usize + 1];
-        for i in 1..=(n as usize) {
-            result[i] = result[i & (i - 1)] + 1;
-        }
-        result
+    pub fn is_power_of_four(n: i32) -> bool {
+        n & BITS > 0 && n & (n - 1) == 0
     }
 }
