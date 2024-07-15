@@ -8,16 +8,16 @@ struct Solution;
 impl Solution {
     pub fn read_binary_watch(turned_on: i32) -> Vec<String> {
         let mut result = vec![];
-        for h in 0..12 as u32 {
-            for m in 0..60 as u32 {
-                if h.count_ones() + m.count_ones() == turned_on as u32 {
-                    let item = if m < 10 {
-                        format!("{}:0{}", h, m)
-                    } else {
-                        format!("{}:{}", h, m)
-                    };
-                    result.push(item);
-                }
+        for i in 0..2_u32.pow(10) {
+            let h = i >> 6;
+            let m = i & ((1 << 6) - 1);
+            if h < 12 && m < 60 && i.count_ones() == turned_on as u32 {
+                let item = if m < 10 {
+                    format!("{}:0{}", h, m)
+                } else {
+                    format!("{}:{}", h, m)
+                };
+                result.push(item);
             }
         }
         result
