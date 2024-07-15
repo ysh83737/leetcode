@@ -7,13 +7,13 @@ fn main() {
 struct Solution;
 impl Solution {
     pub fn find_the_difference(s: String, t: String) -> char {
-        let mut codes_t = 0;
+        let mut bits = 0;
         for ch in t.chars() {
-            codes_t += ch as u32;
+            bits ^= ch as u32;
         }
         for ch in s.chars() {
-            codes_t -= ch as u32;
+            bits ^= ch as u32;
         }
-        char::from_u32(codes_t).unwrap()
+        char::from_u32(bits).unwrap()
     }
 }
