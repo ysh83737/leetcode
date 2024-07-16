@@ -5,26 +5,24 @@ fn main() {
 }
 
 struct Solution;
-const DIGIT: u32 = (1 << 4) - 1;
-const HEX_SYMBOLS: [char; 6] = ['a', 'b', 'c', 'd', 'e', 'f'];
 impl Solution {
     pub fn to_hex(num: i32) -> String {
+        if num == 0 {
+            return String::from("0");
+        }
         // 转为无符号u32
         let mut u_num = num as u32;
         let mut result = String::new();
         while u_num != 0 {
-            let value = u_num & DIGIT;
+            let value = u_num & 0xf;
             let digit = if value < 10 {
-                char::from_digit(value, 10).unwrap()
+                char::from_u32('0' as u32 + value)
             } else {
-                HEX_SYMBOLS[value as usize % 10]
+                char::from_u32('a' as u32 + value - 10)
             };
-            result.push(digit);
+            result.insert(0, digit.unwrap());
             u_num >>= 4;
         }
-        if result.len() == 0 {
-            result.push('0');
-        }
-        result.chars().rev().collect()
+        result
     }
 }
