@@ -7,13 +7,10 @@ fn main() {
 struct Solution;
 impl Solution {
     pub fn find_complement(num: i32) -> i32 {
-        let mut prefix = -1;
-        let mut n = num;
-        while n > 0 {
-            prefix <<= 1;
-            n >>= 1;
+        let mut valid_bit = num;
+        for i in [1, 2, 4, 8, 16] {
+            valid_bit |= valid_bit >> i;
         }
-        prefix |= num;
-        !prefix
+        valid_bit & !num
     }
 }
